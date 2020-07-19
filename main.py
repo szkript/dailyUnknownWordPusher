@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import sqlite3
 from time import sleep
 
+
 def simple_get(url):
     """
     Attempts to get the content at `url` by making an HTTP GET request.
@@ -43,18 +44,17 @@ def log_error(e):
 
 
 def get_all_word_by_letter(letter):
+    test_limit = 20000
     words = []
-    page_index = 1050
+    page_index = 0
     while True:
-        print(f"processing {page_index}")
+        print(f"processing {letter} {page_index}")
         raw_html = simple_get(f"https://idegen-szavak.hu/szavak/betu_szerint/{letter}/{page_index}")
         html = BeautifulSoup(raw_html, 'html.parser')
-        if not html.select('.item'):
+        if not html.select('.item') or page_index == test_limit:
             print(f"out of content at page {page_index}")
             break
         for item in html.select('.item'):
-            # print(f"{i} : {item.h1.text}")
-            # print(f"{item.p.text} \n")
             words.append(f"Word : {item.h1.text} \n Description: {item.p.text}")
         sleep(1)
         page_index += 5
@@ -62,9 +62,19 @@ def get_all_word_by_letter(letter):
 
 
 def main():
-    words = get_all_word_by_letter("a")
-    for word in words:
+    wordlist = []
+    base64chars = list(chars('az'))
+    for character in base64chars:
+        words = get_all_word_by_letter(character)
+        wordlist.append(words)
+    for word in wordlist:
         print(word)
+
+
+def chars(*args):
+    for a in args:
+        for i in range(ord(a[0]), ord(a[1]) + 1):
+            yield chr(i)
 
 
 if __name__ == '__main__':
