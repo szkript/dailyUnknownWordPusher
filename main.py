@@ -44,13 +44,14 @@ def log_error(e):
 
 def get_all_word_by_letter(letter):
     words = []
-    page_index = 0
+    page_index = 1050
     while True:
         print(f"processing {page_index}")
         raw_html = simple_get(f"https://idegen-szavak.hu/szavak/betu_szerint/{letter}/{page_index}")
-        if len(raw_html) == 0:
-            break
         html = BeautifulSoup(raw_html, 'html.parser')
+        if not html.select('.item'):
+            print(f"out of content at page {page_index}")
+            break
         for item in html.select('.item'):
             # print(f"{i} : {item.h1.text}")
             # print(f"{item.p.text} \n")
