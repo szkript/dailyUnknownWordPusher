@@ -46,10 +46,11 @@ def main():
     raw_html = simple_get("https://idegen-szavak.hu/szavak/betu_szerint/a")
     print(len(raw_html))
     html = BeautifulSoup(raw_html, 'html.parser')
-    for p in html.select('.item'):
-        print(p.text)
-        print("---------")
+    for i, item in enumerate(html.select('.item')):
+        print(f"{i} : {item.h1.text}")
+        print(f"{item.p.text} \n")
 
 
 if __name__ == '__main__':
+    conn = sqlite3.connect('words.db')
     main()
