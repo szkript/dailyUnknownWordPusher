@@ -43,12 +43,17 @@ def log_error(e):
 
 
 def main():
+    all_words = ()
+    words = []
     raw_html = simple_get("https://idegen-szavak.hu/szavak/betu_szerint/a")
-    print(len(raw_html))
     html = BeautifulSoup(raw_html, 'html.parser')
     for i, item in enumerate(html.select('.item')):
-        print(f"{i} : {item.h1.text}")
-        print(f"{item.p.text} \n")
+        # print(f"{i} : {item.h1.text}")
+        # print(f"{item.p.text} \n")
+        words.append(f"Word : {item.h1.text} \n Description: {item.p.text}")
+
+    for word in words:
+        print(word)
 
 
 if __name__ == '__main__':
