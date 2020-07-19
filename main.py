@@ -3,7 +3,7 @@ from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
 import sqlite3
-
+from time import sleep
 
 def simple_get(url):
     """
@@ -42,16 +42,26 @@ def log_error(e):
     print(e)
 
 
-def main():
-    all_words = ()
+def get_all_word_by_letter(letter):
     words = []
-    raw_html = simple_get("https://idegen-szavak.hu/szavak/betu_szerint/a")
-    html = BeautifulSoup(raw_html, 'html.parser')
-    for i, item in enumerate(html.select('.item')):
-        # print(f"{i} : {item.h1.text}")
-        # print(f"{item.p.text} \n")
-        words.append(f"Word : {item.h1.text} \n Description: {item.p.text}")
+    page_index = 0
+    while True:
+        print(f"processing {page_index}")
+        raw_html = simple_get(f"https://idegen-szavak.hu/szavak/betu_szerint/{letter}/{page_index}")
+        if len(raw_html) == 0:
+            break
+        html = BeautifulSoup(raw_html, 'html.parser')
+        for item in html.select('.item'):
+            # print(f"{i} : {item.h1.text}")
+            # print(f"{item.p.text} \n")
+            words.append(f"Word : {item.h1.text} \n Description: {item.p.text}")
+        sleep(1)
+        page_index += 5
+    return words
 
+
+def main():
+    words = get_all_word_by_letter("a")
     for word in words:
         print(word)
 
