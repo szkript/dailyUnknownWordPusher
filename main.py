@@ -44,8 +44,7 @@ def log_error(e):
 
 
 def get_all_word_by_letter(letter):
-    test_limit = 10
-    words = []
+    test_limit = 500000000000000
     page_index = 0
     while True:
         print(f"processing {letter} {page_index}")
@@ -55,25 +54,24 @@ def get_all_word_by_letter(letter):
             print(f"out of content at page {page_index}")
             break
         for item in html.select('.item'):
-            words.append(f"Word : {item.h1.text} \n Description: {item.p.text}")
+            upload_word_into_database(letter, item.h1.text, item.p.text)
         sleep(1)
         page_index += 5
-    return words
 
 
 def main():
-    word_list = []
     base64chars = list(chars('az'))
     for character in base64chars:
-        words = get_all_word_by_letter(character)
-        word_list.append(words)
-    for word in word_list:
-        upload_word_into_database(word)
+        get_all_word_by_letter(character)
 
 
-def upload_word_into_database(word):
+def upload_word_into_database(letter, word, meaning):
+    conn = sqlite3.connect('words.db')
     c = conn.cursor()
-    c.execute("INSERT INTO word_collection VALUES ()")
+    data = [None, letter, word, meaning]
+    c.execute("INSERT INTO word_collection VALUES (?,?,?,?)", data)
+    conn.commit()
+    conn.close()
 
 
 def chars(*args):
@@ -83,5 +81,4 @@ def chars(*args):
 
 
 if __name__ == '__main__':
-    conn = sqlite3.connect('words.db')
-    # main()
+    main()
