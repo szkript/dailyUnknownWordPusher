@@ -60,9 +60,10 @@ def get_all_word_by_letter(letter):
 
 
 def main():
-    base64chars = list(chars('az'))
+    base64chars = list(chars('ez'))
     for character in base64chars:
         get_all_word_by_letter(character)
+        sleep(60)
 
 
 def upload_word_into_database(letter, word, meaning):
