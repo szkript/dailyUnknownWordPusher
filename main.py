@@ -44,7 +44,7 @@ def log_error(e):
 
 
 def get_all_word_by_letter(letter):
-    test_limit = 20000
+    test_limit = 10
     words = []
     page_index = 0
     while True:
@@ -68,7 +68,12 @@ def main():
         words = get_all_word_by_letter(character)
         word_list.append(words)
     for word in word_list:
-        print(word)
+        upload_word_into_database(word)
+
+
+def upload_word_into_database(word):
+    c = conn.cursor()
+    c.execute("INSERT INTO word_collection VALUES ()")
 
 
 def chars(*args):
