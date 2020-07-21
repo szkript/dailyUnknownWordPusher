@@ -62,12 +62,12 @@ def get_all_word_by_letter(letter):
 
 
 def main():
-    wordlist = []
+    word_list = []
     base64chars = list(chars('az'))
     for character in base64chars:
         words = get_all_word_by_letter(character)
-        wordlist.append(words)
-    for word in wordlist:
+        word_list.append(words)
+    for word in word_list:
         print(word)
 
 
@@ -79,4 +79,4 @@ def chars(*args):
 
 if __name__ == '__main__':
     conn = sqlite3.connect('words.db')
-    main()
+    # main()
