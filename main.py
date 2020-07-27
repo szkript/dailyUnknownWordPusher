@@ -60,7 +60,7 @@ def get_all_word_by_letter(letter):
 
 
 def main():
-    base64chars = list(chars('ez'))
+    base64chars = list(chars('az'))
     for character in base64chars:
         get_all_word_by_letter(character)
         sleep(60)
